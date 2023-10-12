@@ -20,38 +20,44 @@ public class Main {
             );
         }
         long minor = getNumOfMinor(persons);
-        System.out.println("Всего несовершеннолетних = " + minor);
-        List<String> recruits =  getListOfRecruits(persons);
-        for (int i = 0; i < 15; i++) {
-            System.out.println(recruits.get(i));
-        }
+        List<String> recruits = getListOfRecruits(persons);
+        List<String> workers = getListOfEmployable(persons);
+        System.out.println("MINOR = " + minor);
+        System.out.println("RECRUITS = " + recruits.size());
+        System.out.println("WORKERS = " + workers.size());
 
 
     }
 
-    public static long getNumOfMinor ( Collection <Person> p){
-        Stream <Person> stream = p.stream();
+    public static long getNumOfMinor(Collection<Person> p) {
+        Stream<Person> stream = p.stream();
         return stream.filter(person -> person.getAge() < 18).count();
     }
 
-    public static List<String> getListOfRecruits (Collection <Person> p){
-        Stream <Person> stream = p.stream();
-        return  stream.filter(person -> person.getAge() >= 18)
+    public static List<String> getListOfRecruits(Collection<Person> p) {
+        Stream<Person> stream = p.stream();
+        return stream.filter(person -> person.getAge() >= 18)
                 .filter(person -> person.getAge() < 27)
-                .map(person -> person.getFamily()).collect(Collectors.toList());
+                .map(Person::getFamily).collect(Collectors.toList());
     }
 
-    public static List<String> getListOfEmployable (Collection <Person> p){
-             Stream <Person> stream = p.stream();
-        return  stream.filter(person -> person.getAge() >= 18)
+    public static List<String> getListOfEmployable(Collection<Person> p) {
+        List<String> list = new ArrayList<>();
+        Stream<Person> stream = p.stream();
+        stream.filter(person -> person.getAge() >= 18)
+                .filter(person -> person.getAge() < 60)
+                .filter(person -> person.getEducation().toString().equals("HIGHER"))
+                .filter(person -> person.getSex().toString().equals("WOMAN"))
+                .forEach(person -> list.add(person.getFamily()));
+        Stream<Person> stream1 = p.stream();
+        stream1.filter(person -> person.getAge() >= 18)
                 .filter(person -> person.getAge() < 65)
-                .filter(person -> person.getEducation().equals("HIGHER"))
-                .filter(person -> person.getSex().equals("WOMAN") && person.getAge() < 60)
-                .sorted(Comparator.comparing(person -> person.getFamily()))
+                .filter(person -> person.getEducation().toString().equals("HIGHER"))
+                .filter(person -> person.getSex().toString().equals("MAN"))
+                .forEach(person -> list.add(person.getFamily()));
 
+        return list;
 
-
-        return null;
     }
 
 

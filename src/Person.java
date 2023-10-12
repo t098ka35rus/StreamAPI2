@@ -1,9 +1,9 @@
 public class Person {
-    private String name;
-    private String family;
-    private Integer age;
-    private Sex sex;
-    private Education education;
+    private final String name;
+    private final String family;
+    private final Integer age;
+    private final Sex sex;
+    private final Education education;
 
     public Person(String name, String family, int age, Sex sex, Education education) {
         this.name = name;
